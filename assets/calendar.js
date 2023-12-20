@@ -1,19 +1,7 @@
 // this is now a standalone javascript file, formerly embedded in fullcalendar.html.twig (ugly)
 // gets Parameters via DOM, see below
 
-// Load jQuery when it is not loaded already by the theme
-if (typeof jQuery=='undefined') {
-	var headTag = document.getElementsByTagName("head")[0];
-	var jqTag = document.createElement('script');
-	jqTag.type = 'text/javascript';
-	jqTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
-	jqTag.onload = whenJqReady;
-	headTag.appendChild(jqTag);
-} else {
-	whenJqReady();
-}
-
-function whenJqReady() {
+jQuery( function() {
 	var verbose = false;
 	var defaultLocale = 'en';
 	var cfgWeekNums = jQuery('#weeknums').text();	//	get Paramter from DOM
@@ -437,7 +425,7 @@ function whenJqReady() {
 		// Add the contents of cfgfiles to #legend:
 		document.getElementById('legend').appendChild(makeUL(calNames, colors));
 	}
-}
+});
 
 function makeUL(array, colors) {
 	// Create the list element:
