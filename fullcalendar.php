@@ -43,7 +43,6 @@ class FullcalendarPlugin extends Plugin
         // use obsolete Flag useCustomPageTemplate, in case it is still present and set to true
         $enableByPageHeader = (isset($page->header()->fullcalendar) && $page->header()->fullcalendar === true);
         if (($page->template() === 'calendar') || ($enableOnAllPages) || ($enableByPageHeader)) { // see https://github.com/wernerjoss/grav-plugin-fullcalendar/issues/45
-            $this->addAssets();
         }
 
         $this->serveProxy();

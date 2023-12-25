@@ -1,0 +1,15 @@
+<div id="calendar"></div>
+<div id="legend"></div>
+
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.min.js' %}
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.min.js' %}
+
+{% script %}
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
+      });
+{% endscript %}
