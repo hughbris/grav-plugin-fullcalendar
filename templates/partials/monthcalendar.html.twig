@@ -1,15 +1,37 @@
 <div id="calendar"></div>
 <div id="legend"></div>
 
-{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.min.js' %}
-{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.min.js' %}
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
+
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.js' %}
+{% style 'plugins://fullcalendar/fc4/packages/daygrid/main.css' %}
+
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js' %}
+
 
 {% script %}
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
+
         var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
-        });
+            initialView: 'dayGridMonth', // dayGridWeek, timeGridWeek
+            height: 'auto',
+
+            googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
+            events: { {# TODO: conditionally include this and other ical properties/events #}
+                googleCalendarId: '{{ gcal }}',
+                },
+
+            eventSourceSuccess: function(content, response) {
+                console.log('eventSourceSuccess', content, response);
+                return content;
+                },
+            eventSourceFailure: (error) => {
+                console.log('eventSourceFailure', error);
+                },
+            });
+
         calendar.render();
-      });
+
+        });
 {% endscript %}

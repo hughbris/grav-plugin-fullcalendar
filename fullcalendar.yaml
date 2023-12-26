@@ -9,3 +9,4 @@ tz_offset_single: 0
 tz_offset_rec: 0
 enableOnAllPages: false
 firstWeekDay: 1
+# google_api_key: SECRET_KEY

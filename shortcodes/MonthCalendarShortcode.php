@@ -9,12 +9,17 @@ class MonthCalendarShortcode extends Shortcode {
             $twig = $this->twig;
             $params = $sc->getParameters();
             $config = $this->config->get('plugins.fullcalendar');
-            // icsfile is Parameter from shortcode:
-            $icsfile = isset($params['icsfile']) ? $this->grav['twig']->processString($params['icsfile']) : '';
-            $output = $twig->processTemplate('partials/monthcalendar.html.twig',
-                [
-                    'icsfile' => $icsfile,
-                ]);
+
+            $options = array();
+            if(isset($params['ical'])) { // NB changed from 'icsfile'
+                $options['ical'] = $this->grav['twig']->processString($params['ical']); // not sure why Twig process is needed here
+            }
+            elseif(isset($params['gcal'])) {
+                // TODO: check for existence of google_api_key here (or in template)
+                $options['gcal'] = $params['gcal'];
+            }
+
+            $output = $twig->processTemplate('partials/monthcalendar.html.twig', $options);
             return $output;
         });
     }
