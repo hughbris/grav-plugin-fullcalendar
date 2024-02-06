@@ -29,9 +29,6 @@ class FullerCalendar extends HTMLElement {
 			#${calendarEl.id} {
 				--fc-page-bg-color: initial;
 			}
-			.fc-direction-ltr .fc-timegrid-slot-label-frame {
-				display: inline-table;
-			}
 			`);
 		this.shadowRoot.adoptedStyleSheets = [sheet];
 
@@ -44,17 +41,26 @@ class FullerCalendar extends HTMLElement {
 		stickyHeaderDates: true,
 		// footerToolbar: true,
 		titleFormat: { month: 'short', day: 'numeric' },
-						googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
-						events: { {# TODO: conditionally include this and other ical properties/events #}
-								googleCalendarId: '{{ gcal }}',
-								},
+		dayHeaderFormat: function(date) {
+			const dt = date.date.marker;
+			const dow = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // FIXME: hacky
+			return dow[dt.getDay()] + ' ' + dt.getDate() + '/' + (dt.getMonth() + 1);
+			},
+		googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
+		events: { {# TODO: conditionally include this and other ical properties/events #}
+			googleCalendarId: '{{ gcal }}',
+			},
 
 		});
+
 
 		calendar.render();
-		calendarEl.querySelectorAll('[style]').forEach((el) => {
-			el.removeAttribute('style');
-		});
+
+		setTimeout( () => {
+			calendarEl.querySelectorAll('[style]').forEach((el) => {
+				el.removeAttribute('style');
+				});
+		}, 2000);
 		calendar.today();
 	}
 }
