@@ -1,37 +1,64 @@
-<div id="calendar"></div>
+<demo-calendar id="calendar"></demo-calendar>
 <div id="legend"></div>
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.js' %}
-{% style 'plugins://fullcalendar/fc4/packages/daygrid/main.css' %}
 
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.10/index.global.min.js' %}
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js' %}
 
+{% script 'plugins://fullcalendar/assets/ical.js/build/ical.min.js' at 'bottom' %}
 
-{% script %}
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+{% script at 'bottom' %}
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // dayGridWeek, timeGridWeek
-            height: 'auto',
+class FullerCalendar extends HTMLElement {
+	constructor() {
+		super();
 
-            googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
-            events: { {# TODO: conditionally include this and other ical properties/events #}
-                googleCalendarId: '{{ gcal }}',
-                },
+		this.attachShadow({
+			mode: 'open',
+			});
 
-            eventSourceSuccess: function(content, response) {
-                console.log('eventSourceSuccess', content, response);
-                return content;
-                },
-            eventSourceFailure: (error) => {
-                console.log('eventSourceFailure', error);
-                },
-            });
+		const calendarEl = document.createElement('div');
+		calendarEl.id = this.id;
+		this.shadowRoot.append(calendarEl);
 
-        calendar.render();
+		const sheet = new CSSStyleSheet();
+		sheet.replaceSync(`
+			#${calendarEl.id} {
+				--fc-page-bg-color: initial;
+			}
+			.fc-direction-ltr .fc-timegrid-slot-label-frame {
+				display: inline-table;
+			}
+			`);
+		this.shadowRoot.adoptedStyleSheets = [sheet];
 
-        });
+		const calendar = new FullCalendar.Calendar(calendarEl, {
+			initialView: "timeGridWeek",
+		height: 'auto',
+		allDaySlot: false,
+		slotMinTime: '07:00:00',
+		nowIndicator: true,
+		stickyHeaderDates: true,
+		// footerToolbar: true,
+		titleFormat: { month: 'short', day: 'numeric' },
+						googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
+						events: { {# TODO: conditionally include this and other ical properties/events #}
+								googleCalendarId: '{{ gcal }}',
+								},
+
+		});
+
+		calendar.render();
+		calendarEl.querySelectorAll('[style]').forEach((el) => {
+			el.removeAttribute('style');
+		});
+		calendar.today();
+	}
+}
+
+customElements.define('demo-calendar', FullerCalendar);
+
 {% endscript %}
