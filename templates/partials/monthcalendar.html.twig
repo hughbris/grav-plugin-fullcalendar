@@ -1,10 +1,15 @@
 {% set cal_id = unique_id(6) %}
 <fuller-calendar id="fcl-{{ cal_id }}"></fuller-calendar>
+<dialog id="dlg-{{ cal_id }}">
+	<p>Greetings, one and all!</p>
+	{{ include('partials/booking-dialog.html.twig') }}
+</dialog>
 <div id="legend"></div>
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.js' %}
+{% style 'plugins://fullcalendar/assets/timegrid.css' %}
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.10/index.global.min.js' %}
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.10/index.global.min.js' %}
@@ -58,6 +63,9 @@ class FullerCalendar extends HTMLElement {
 		select: function(selectMetadata) { console.log(selectMetadata);
 			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
 			// TODO: reject any dates in the past
+			const dialog = document.querySelector('#dlg-{{ cal_id }}');
+			const closeButton = dialog.querySelector('button.close'); console.log(closeButton);
+			dialog.showModal();
 			},
 		});
 
