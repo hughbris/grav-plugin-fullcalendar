@@ -6,6 +6,7 @@
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.js' %}
 
+{% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.10/index.global.min.js' %}
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.10/index.global.min.js' %}
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js' %}
 
@@ -38,6 +39,9 @@ class FullerCalendar extends HTMLElement {
 		height: 'auto',
 		allDaySlot: false,
 		slotMinTime: '07:00:00',
+		selectable: true,
+		selectMirror: true,
+		selectOverlap: false,
 		nowIndicator: true,
 		stickyHeaderDates: true,
 		// footerToolbar: true,
@@ -51,7 +55,10 @@ class FullerCalendar extends HTMLElement {
 		events: { {# TODO: conditionally include this and other ical properties/events #}
 			googleCalendarId: '{{ gcal }}',
 			},
-
+		select: function(selectMetadata) { console.log(selectMetadata);
+			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
+			// TODO: reject any dates in the past
+			},
 		});
 
 
