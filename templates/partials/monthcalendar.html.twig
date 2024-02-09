@@ -64,6 +64,14 @@ class FullerCalendar extends HTMLElement {
 			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
 			// TODO: reject any dates in the past
 			const dialog = document.querySelector('#dlg-{{ cal_id }}');
+			const closeButton = dialog.querySelector('button.close');
+			if(closeButton) {
+				closeButton.addEventListener("click", (e) => {
+					e.preventDefault();
+					dialog.close();
+					});
+			}
+
 			const timeFormat = new Intl.DateTimeFormat('en-GB', {hour: 'numeric', minute: 'numeric'});
 			const start = new Date(selectMetadata.startStr);
 			const finish = new Date(selectMetadata.endStr);
