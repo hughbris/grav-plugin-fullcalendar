@@ -1,7 +1,7 @@
 {% set cal_id = unique_id(6) %}
 <fuller-calendar id="fcl-{{ cal_id }}"></fuller-calendar>
-<dialog id="dlg-{{ cal_id }}">
-	<p>Greetings, one and all!</p>
+<dialog id="dlg-{{ cal_id }}" style="border: none !important; border-radius: calc(5px * var(--ratio)); box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 1.6rem; max-width: 400px; background-color: darkred;">
+	<h2 style="margin: 2rem 0 1rem; font-weight: 800;">Book a sesh</h2>
 	{{ include('partials/booking-dialog.html.twig') }}
 </dialog>
 <div id="legend"></div>
@@ -64,7 +64,13 @@ class FullerCalendar extends HTMLElement {
 			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
 			// TODO: reject any dates in the past
 			const dialog = document.querySelector('#dlg-{{ cal_id }}');
-			const closeButton = dialog.querySelector('button.close'); console.log(closeButton);
+			const timeFormat = new Intl.DateTimeFormat('en-GB', {hour: 'numeric', minute: 'numeric'});
+			const start = new Date(selectMetadata.startStr);
+			const finish = new Date(selectMetadata.endStr);
+			const startField = dialog.querySelector('#start');
+			const finishField = dialog.querySelector('#finish');
+			startField.value = timeFormat.format(start);
+			finishField.value = timeFormat.format(finish);
 			dialog.showModal();
 			},
 		});
