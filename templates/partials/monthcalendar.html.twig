@@ -52,7 +52,7 @@ class FullerCalendar extends HTMLElement {
 		titleFormat: { month: 'short', day: 'numeric' },
 		dayHeaderFormat: function(date) {
 			const dt = date.date.marker;
-			const dow = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // FIXME: hacky
+			const dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // FIXME: still hacky
 			return dow[dt.getDay()] + ' ' + dt.getDate() + '/' + (dt.getMonth() + 1);
 			},
 		googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
