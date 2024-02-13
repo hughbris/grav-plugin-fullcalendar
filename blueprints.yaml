@@ -15,6 +15,7 @@ dependencies:
     - problems
     - error
     - shortcode-core
+    - email
 
 form:
     fields:

@@ -1,8 +1,11 @@
 <?php
 namespace Grav\Plugin;
 
+use Composer\Autoload\ClassLoader;
 use Grav\Common\Plugin;
 use RocketTheme\Toolbox\Event\Event;
+use Grav\Common\Utils;
+use Grav\Plugin\FullCalendar\Appointment;
 
 class FullcalendarPlugin extends Plugin
 {
@@ -27,7 +30,54 @@ class FullcalendarPlugin extends Plugin
             'onShortcodeHandlers' => ['onShortcodeHandlers', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onPageInitialized' => ['onPageInitialized', 0],
+            'onFormProcessed' => ['processAppointments', 0],
         ]);
+    }
+
+    /**
+    * @return ClassLoader
+    */
+    public function autoload(): ClassLoader {
+        return require __DIR__ . '/vendor/autoload.php';
+    }
+
+    /**
+     * Send email when processing the form data.
+     *
+     * @param Event $event
+     */
+    public function processAppointments(Event $event)
+    {
+        $form = $event['form'];
+        $action = $event['action'];
+        $params = $event['params'];
+
+        switch ($action) {
+            case 'calendar':
+                // Prepare Twig variables
+                $vars = array(
+                    'form' => $form,
+                    'page' => $this->grav['page']
+                );
+
+                if (Utils::isAssoc($params)) {
+                    $this->sendAppointment($form, $params, $vars);
+                }
+                else {
+                    foreach ($params as $email) {
+                        $this->sendAppointment($form, $email, $vars);
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private function sendAppointment($form, $params, $vars) {
+        $appointment = new Appointment();
+        $message = $appointment->buildAppointment($params, $vars);
+
+        $appointment->send($message);
     }
 
     public function onPageInitialized(Event $event)

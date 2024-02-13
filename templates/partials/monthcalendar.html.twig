@@ -9,7 +9,6 @@
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.js' %}
-{% style 'plugins://fullcalendar/assets/timegrid.css' %}
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.10/index.global.min.js' %}
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.10/index.global.min.js' %}
@@ -37,7 +36,7 @@ class FullerCalendar extends HTMLElement {
 				--fc-page-bg-color: initial;
 			}
 			`);
-		this.shadowRoot.adoptedStyleSheets = [sheet];
+		this.shadowRoot.adoptedStyleSheets.push(sheet);
 
 		const calendar = new FullCalendar.Calendar(calendarEl, {
 			initialView: "timeGridWeek",
