@@ -22,6 +22,8 @@ class Appointment extends Email {
         $language = $this->grav['language'];
         /** @var Config $config */
         $config = $this->grav['config'];
+        /** @var Twig $twig */
+        $twig = $this->grav['twig'];
 
         // Extend parameters with defaults.
         $defaults = [
@@ -50,11 +52,12 @@ class Appointment extends Email {
             throw new \RuntimeException($language->translate('PLUGIN_EMAIL.PLEASE_CONFIGURE_A_FROM_ADDRESS'));
         }
 
-        array_walk_recursive($params, function(&$value) {
-            if (is_string($value)) {
-                $value = $this->grav['twig']->processString($value);
-            }
-            });
+        // make email configuration available to templates
+        $vars += [
+            'email' => $params,
+        ];
+
+        $params = $this->processParams($params, $vars);
 
         $email = $message->getEmail();
         // Process parameters.
@@ -79,10 +82,7 @@ class Appointment extends Email {
             }
         }
 
-        /** @var Twig $twig */
-        $twig = $this->grav['twig'];
-        $twig->init();
-        $ics = $twig->processString($params['ical']);
+        $ics = $twig->processString($params['ical'], $vars);
 
         // from https://github.com/symfony/symfony/issues/47279#issuecomment-1232053603
         $attachment = new DataPart($ics, 'request.ics', 'text/calendar', 'quoted-printable');
