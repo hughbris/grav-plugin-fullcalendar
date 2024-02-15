@@ -2,6 +2,7 @@
 <fuller-calendar id="fcl-{{ cal_id }}"></fuller-calendar>
 <dialog id="dlg-{{ cal_id }}" style="border: none !important; border-radius: calc(5px * var(--ratio)); box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 1.6rem; max-width: 400px; background-color: darkred;">
 	<h2 style="margin: 2rem 0 1rem; font-weight: 800;">Book a sesh</h2>
+	<button type="button" class="button close">Close</button>
 	{{ include('partials/booking-dialog.html.twig') }}
 </dialog>
 <div id="legend"></div>
@@ -17,6 +18,15 @@
 {% script 'plugins://fullcalendar/assets/ical.js/build/ical.min.js' at 'bottom' %}
 
 {% script at 'bottom' %}
+
+const dialog = document.querySelector('#dlg-{{ cal_id }}');
+const closeButton = dialog.querySelector('button.close');
+if(closeButton) {
+	closeButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		dialog.close();
+		});
+}
 
 class FullerCalendar extends HTMLElement {
 	constructor() {
@@ -62,14 +72,6 @@ class FullerCalendar extends HTMLElement {
 		select: function(selectMetadata) { console.log(selectMetadata);
 			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
 			// TODO: reject any dates in the past
-			const dialog = document.querySelector('#dlg-{{ cal_id }}');
-			const closeButton = dialog.querySelector('button.close');
-			if(closeButton) {
-				closeButton.addEventListener("click", (e) => {
-					e.preventDefault();
-					dialog.close();
-					});
-			}
 
 			const timeFormat = new Intl.DateTimeFormat('en-GB', {hour: 'numeric', minute: 'numeric'});
 			const start = new Date(selectMetadata.startStr);
