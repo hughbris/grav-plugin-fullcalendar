@@ -14,7 +14,7 @@ class Appointment extends Email {
         $this->grav = Grav::instance();
     }
 
-    public function buildAppointment(array $params, array $vars = []): Message {
+    public function buildInvitation(array $params, array $vars = []): Message {
         // base off https://github.com/getgrav/grav-plugin-email/blob/develop/classes/Email.php#L123
         $message = new Message();
 

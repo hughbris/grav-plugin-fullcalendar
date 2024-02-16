@@ -28,6 +28,13 @@ if(closeButton) {
 		});
 }
 
+Date.prototype.toYmdDate = function() {
+	const year = new Intl.DateTimeFormat(undefined, { year: 'numeric' }).format(this);
+	const month = new Intl.DateTimeFormat(undefined, { month: '2-digit' }).format(this);
+	const day = new Intl.DateTimeFormat(undefined, { day: '2-digit' }).format(this);
+	return `${year}-${month}-${day}`;
+	};
+
 class FullerCalendar extends HTMLElement {
 	constructor() {
 		super();
@@ -74,12 +81,19 @@ class FullerCalendar extends HTMLElement {
 			// TODO: reject any dates in the past
 
 			const timeFormat = new Intl.DateTimeFormat('en-GB', {hour: 'numeric', minute: 'numeric'});
-			const start = new Date(selectMetadata.startStr);
-			const finish = new Date(selectMetadata.endStr);
-			const startField = dialog.querySelector('#start');
-			const finishField = dialog.querySelector('#finish');
-			startField.value = timeFormat.format(start);
-			finishField.value = timeFormat.format(finish);
+			const dateFormat = new Intl.DateTimeFormat('en-GB', {dateStyle: 'full'});
+			const start = selectMetadata.start;
+			const finish = selectMetadata.end;
+			const startDateDisplay = dialog.querySelector('#booking-date-display');
+			const startDateField = dialog.querySelector('#booking-start-date');
+			const startTimeField = dialog.querySelector('#booking-start-time');
+			const finishDateField = dialog.querySelector('#booking-finish-date');
+			const finishTimeField = dialog.querySelector('#booking-finish-time');
+			startDateDisplay.replaceChildren(dateFormat.format(start));
+			startDateField.value = start.toYmdDate();
+			finishDateField.value = finish.toYmdDate(); // we're not handling appointments spanning days RN, this included for completeness
+			startTimeField.value = timeFormat.format(start);
+			finishTimeField.value = timeFormat.format(finish);
 			dialog.showModal();
 			},
 		});

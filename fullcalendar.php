@@ -64,8 +64,8 @@ class FullcalendarPlugin extends Plugin
                     $this->sendAppointment($form, $params, $vars);
                 }
                 else {
-                    foreach ($params as $email) {
-                        $this->sendAppointment($form, $email, $vars);
+                    foreach ($params as $calendar) {
+                        $this->sendAppointment($form, $calendar, $vars);
                     }
                 }
 
@@ -75,9 +75,9 @@ class FullcalendarPlugin extends Plugin
 
     private function sendAppointment($form, $params, $vars) {
         $appointment = new Appointment();
-        $message = $appointment->buildAppointment($params, $vars);
+        $invitation = $appointment->buildInvitation($params, $vars);
 
-        $appointment->send($message);
+        $appointment->send($invitation);
     }
 
     public function onPageInitialized(Event $event)

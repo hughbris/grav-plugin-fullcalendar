@@ -1,14 +1,21 @@
-{% set fields = form.fields %}
+{% macro timeOffset(tm) -%}
+    {% set parts = tm|split(':', 2) %}
+    +{{ parts[0]|number_format() }} hours{% if parts[1] > 0 %} {{ parts[1] }} minutes{% endif %}
+{%- endmacro %}
+{% macro isoDateTime(dt, tm = '00:00') -%}
+    {% set dt = dt|default(date()) %}
+    {{ date(dt)|date_modify(_self.timeOffset(tm))|date('Ymd\\THis\\Z', 'UTC') }}
+{%- endmacro %}
+{% set values = form.value %}
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//hacksw/handcal//NONSGML v1.0//EN
-BEGIN:VEVENT{#
-METHOD: REQUEST?? #}
-UID:somethinguniquehere204832901
-DTSTAMP:20240303T001000
-DTSTART:20240303T100000
-DTEND:20150303T1500000
-SUMMARY:Just a test
-DESCRIPTION:Test desc.
+PRODID:-//metamotive/fckalendar//NONSGML v1.0//EN
+BEGIN:VEVENT
+METHOD:REQUEST
+UID:{{ unique_id(32) }}
+DTSTAMP:{{ _self.isoDateTime() }}
+DTSTART:{{ _self.isoDateTime(values.dtstart, values.start) }}
+DTEND:{{ _self.isoDateTime(values.dtfinish, values.finish) }}
+SUMMARY:{{ values.name }}
 END:VEVENT
 END:VCALENDAR
