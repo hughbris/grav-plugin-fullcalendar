@@ -57,7 +57,7 @@ class FullcalendarPlugin extends Plugin
                 // Prepare Twig variables
                 $vars = array(
                     'form' => $form,
-                    'page' => $this->grav['page']
+                    'page' => $this->grav['page'],
                 );
 
                 if (Utils::isAssoc($params)) {
