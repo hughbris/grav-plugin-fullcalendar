@@ -105,6 +105,13 @@ class FullerCalendar extends HTMLElement {
 			finishDateField.value = finish.toYmdDate(); // we're not handling appointments spanning days RN, this included for completeness
 			startTimeField.value = timeFormat.format(start);
 			finishTimeField.value = timeFormat.format(finish);
+
+			// reset some "sticky" dialog display elements from previous submissions
+			dialog.querySelector('*[type=submit]').style.display = 'initial';
+			if(dialog.querySelector('.notices')) {
+				dialog.querySelector('.notices').remove();
+			}
+
 			dialog.showModal();
 			},
 		});
