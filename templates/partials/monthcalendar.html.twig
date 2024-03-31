@@ -55,7 +55,7 @@ class FullerCalendar extends HTMLElement {
 			});
 
 		const calendarEl = document.createElement('div');
-		calendarEl.id = this.id;
+		calendarEl.id = `${this.id}-rind`;
 		this.shadowRoot.append(calendarEl);
 
 		const sheet = new CSSStyleSheet();
