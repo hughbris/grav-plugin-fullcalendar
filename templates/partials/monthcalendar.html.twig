@@ -1,10 +1,8 @@
 {% set cal_id = unique_id(6) %}
 <fuller-calendar id="fcl-{{ cal_id }}"></fuller-calendar>
-<dialog id="dlg-{{ cal_id }}" style="border: none !important; border-radius: calc(5px * var(--ratio)); box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25); padding: 1.6rem; background-color: #825626; color: #dbd7cb;">
-	<h2 style="margin: 2rem 0 1rem; font-weight: 800;">Book a sesh</h2>
-	<button type="button" class="button close">Close</button>
-	{{ include('partials/booking-dialog.html.twig') }}
-</dialog>
+
+{{ include('partials/booking-dialog.html.twig') }}
+
 <div id="legend"></div>
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
