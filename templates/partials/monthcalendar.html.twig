@@ -68,56 +68,9 @@ class FullerCalendar extends HTMLElement {
 			`);
 		this.shadowRoot.adoptedStyleSheets.push(sheet);
 
-		const calendar = new FullCalendar.Calendar(calendarEl, {
-			initialView: "timeGridWeek",
-		height: 'auto',
-		allDaySlot: false,
-		slotMinTime: '07:00:00',
-		selectable: true,
-		selectMirror: true,
-		selectOverlap: false,
-		nowIndicator: true,
-		stickyHeaderDates: true,
-		// footerToolbar: true,
-		titleFormat: { month: 'short', day: 'numeric' },
-		dayHeaderFormat: function(date) {
-			const dt = date.date.marker;
-			const dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // FIXME: still hacky
-			return dow[dt.getDay()] + ' ' + dt.getDate() + '/' + (dt.getMonth() + 1);
-			},
-		googleCalendarApiKey: '{{ config.plugins.fullcalendar.google_api_key }}',
-		events: { {# TODO: conditionally include this and other ical properties/events #}
-			googleCalendarId: '{{ gcal }}',
-			},
-		select: function(selectMetadata) { console.log(selectMetadata);
-			// alert(`you selected ${selectMetadata.startStr} to ${selectMetadata.endStr}`);
-			// TODO: reject any dates in the past
+		{{ include('partials/monthcalendar-properties.js.twig') }}
 
-			const timeFormat = new Intl.DateTimeFormat('en-GB', {hour: 'numeric', minute: 'numeric'});
-			const dateFormat = new Intl.DateTimeFormat('en-GB', {dateStyle: 'full'});
-			const start = selectMetadata.start;
-			const finish = selectMetadata.end;
-			const startDateDisplay = dialog.querySelector('#booking-date-display');
-			const startDateField = dialog.querySelector('#booking-start-date');
-			const startTimeField = dialog.querySelector('#booking-start-time');
-			const finishDateField = dialog.querySelector('#booking-finish-date');
-			const finishTimeField = dialog.querySelector('#booking-finish-time');
-			startDateDisplay.replaceChildren(dateFormat.format(start));
-			startDateField.value = start.toYmdDate();
-			finishDateField.value = finish.toYmdDate(); // we're not handling appointments spanning days RN, this included for completeness
-			startTimeField.value = timeFormat.format(start);
-			finishTimeField.value = timeFormat.format(finish);
-
-			// reset some "sticky" dialog display elements from previous submissions
-			dialog.querySelector('*[type=submit]').style.display = 'initial';
-			if(dialog.querySelector('.notices')) {
-				dialog.querySelector('.notices').remove();
-			}
-
-			dialog.showModal();
-			},
-		});
-
+		const calendar = new FullCalendar.Calendar(calendarEl, calendarProperties);
 
 		calendar.render();
 
