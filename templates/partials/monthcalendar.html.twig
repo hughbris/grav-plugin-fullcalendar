@@ -73,12 +73,6 @@ class FullerCalendar extends HTMLElement {
 		const calendar = new FullCalendar.Calendar(calendarEl, calendarProperties);
 
 		calendar.render();
-
-		setTimeout( () => {
-			calendarEl.querySelectorAll('[style]').forEach((el) => {
-				el.removeAttribute('style');
-				});
-		}, 2000);
 		calendar.today();
 	}
 }
