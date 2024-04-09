@@ -12,19 +12,7 @@
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js' %}
 {% script 'plugins://fullcalendar/assets/ical.js/build/ical.min.js' at 'bottom' %}
 
-{% style %}
-.booking input {
-	/* font-weight: bold; */
-	text-align: center;
-	letter-spacing: 0.05rem;
-	background-color: #63599b;
-}
-#booking-date-display {
-	text-align: center;
-	font-weight: bold;
-	font-size: larger;
-}
-{% endstyle %}
+{% style 'theme://css/fullcalendar-custom.css' with {loading: 'inline'} %}
 
 {% script at 'bottom' priority: 5 %}
 
