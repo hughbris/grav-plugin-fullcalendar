@@ -26,16 +26,7 @@
 }
 {% endstyle %}
 
-{% script at 'bottom' %}
-
-const dialog = document.querySelector('#dlg-{{ cal_id }}');
-const closeButton = dialog.querySelector('button.close');
-if(closeButton) {
-	closeButton.addEventListener("click", (e) => {
-		e.preventDefault();
-		dialog.close();
-		});
-}
+{% script at 'bottom' priority: 5 %}
 
 Date.prototype.toYmdDate = function() {
 	const year = new Intl.DateTimeFormat(undefined, { year: 'numeric' }).format(this);
