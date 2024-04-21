@@ -7,6 +7,11 @@ const defaultCalendarProperties = {
 	selectable: true,
 	selectMirror: true,
 	selectOverlap: false,
+	selectConstraint: 'businessHours',
+	businessHours: { // refer https://fullcalendar.io/docs/eventConstraint for customisation
+		startTime: '09:00',
+		endTime: '17:00',
+	},
 	nowIndicator: true,
 	stickyHeaderDates: true,
 
