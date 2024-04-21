@@ -1,8 +1,8 @@
 {% set cal_id = unique_id(6) %}
-<fuller-calendar id="fcl-{{ cal_id }}"></fuller-calendar>
 
 {{ include('partials/booking-dialog.html.twig') }}
 
+<fc-kalendar id="fcl-{{ cal_id }}"></fc-kalendar>
 <div id="legend"></div>
 
 {% script 'https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.js' %}
@@ -56,6 +56,6 @@ class FullerCalendar extends HTMLElement {
 	}
 }
 
-customElements.define('fuller-calendar', FullerCalendar);
+customElements.define('fc-kalendar', FullerCalendar);
 
 {% endscript %}
