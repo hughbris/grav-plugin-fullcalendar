@@ -40,6 +40,9 @@ class FullerCalendar extends HTMLElement {
 			#${calendarEl.id} {
 				--fc-page-bg-color: initial;
 			}
+			.fc-day-past {
+				background-color: #fff6f6;
+			}
 			{# this CSS rule requires the id selector to be more specific than the dumbass inline rule it's overriding #}
 			#${calendarEl.id}.fc-direction-ltr .fc-timegrid-slot-label-frame {
 				text-align: initial;
