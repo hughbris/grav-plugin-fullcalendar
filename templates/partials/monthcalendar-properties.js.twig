@@ -18,6 +18,12 @@ const defaultCalendarProperties = {
 		}
 		return true;
 		},
+	eventClick: function(info) { // don't allow selecting existing events
+		info.jsEvent.preventDefault();
+		},
+	eventMouseEnter: function(info) { // show a forbidden cursor on hover
+		info.el.style.cursor = 'not-allowed';
+		},
 	nowIndicator: true,
 	stickyHeaderDates: true,
 
