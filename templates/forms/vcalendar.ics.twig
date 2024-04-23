@@ -1,27 +1,7 @@
-{% macro timeOffset(tm) -%}
-    {% set parts = tm|split(':', 2) %}
-    +{{ parts[0]|number_format() }} hours{% if parts[1] > 0 %} {{ parts[1] }} minutes{% endif %}
-{%- endmacro %}
-{% macro isoDateTime(dt, tm = '00:00') -%}
-    {% set dt = dt|default(date()) %}
-    {{ date(dt)|date_modify(_self.timeOffset(tm))|date('Ymd\\THis\\Z', 'UTC') }}
-{%- endmacro %}
 {% set values = form.value %}
 {% set event = email.event|defined({}) %}
-{% set event_text_fields = ['description', 'location'] %}
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//metamotive/fckalendar//NONSGML v1.0//EN
-BEGIN:VEVENT
-METHOD:REQUEST
-STATUS:TENTATIVE
-UID:{{ unique_id(32) }}
-DTSTAMP:{{ _self.isoDateTime() }}
-DTSTART:{{ _self.isoDateTime(values.dtstart, values.start) }}
-DTEND:{{ _self.isoDateTime(values.dtfinish, values.finish) }}
-SUMMARY:{{ (event.summary|defined(values.name))|ical_text|raw }}
-{% for text_field in event_text_fields if event[text_field] -%}
-{{ text_field|upper }}:{{ event[text_field]|ical_text|raw }}
-{% endfor %}
-END:VEVENT
+{{ include('forms/vevent.ics.twig') }}
 END:VCALENDAR
