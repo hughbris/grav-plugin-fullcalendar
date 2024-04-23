@@ -8,6 +8,7 @@
 {%- endmacro %}
 {% set values = form.value %}
 {% set event = email.event|defined({}) %}
+{% set event_text_fields = ['description', 'location'] %}
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//metamotive/fckalendar//NONSGML v1.0//EN
@@ -19,11 +20,8 @@ DTSTAMP:{{ _self.isoDateTime() }}
 DTSTART:{{ _self.isoDateTime(values.dtstart, values.start) }}
 DTEND:{{ _self.isoDateTime(values.dtfinish, values.finish) }}
 SUMMARY:{{ (event.summary|defined(values.name))|ical_text|raw }}
-{% if event.description -%}
-DESCRIPTION:{{ event.description|ical_text|raw }}
-{% endif %}
-{% if event.location -%}
-LOCATION:{{ event.location|ical_text|raw }}
-{% endif %}
+{% for text_field in event_text_fields if event[text_field] -%}
+{{ text_field|upper }}:{{ event[text_field]|ical_text|raw }}
+{% endfor %}
 END:VEVENT
 END:VCALENDAR
