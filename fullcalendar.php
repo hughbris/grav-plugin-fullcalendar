@@ -28,6 +28,7 @@ class FullcalendarPlugin extends Plugin
         // Enable the main events we are interested in
         $this->enable([
             'onShortcodeHandlers' => ['onShortcodeHandlers', 0],
+            'onTwigExtensions' => ['addTwigExtensions', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onPageInitialized' => ['onPageInitialized', 0],
             'onFormProcessed' => ['processAppointments', 0],
@@ -147,6 +148,14 @@ class FullcalendarPlugin extends Plugin
             }
         }
         */
+    }
+
+    public function addTwigExtensions($event) {
+        $this->grav['twig']->twig()->addFilter(new \Twig_SimpleFilter('ical_text', [$this, 'icalTextEscaper']));
+    }
+
+    public function icalTextEscaper($raw) {
+        return trim(str_replace(["\n", ';', ','], ['\N', '\;', '\,'], $raw));
     }
 
     public function onTwigTemplatePaths()

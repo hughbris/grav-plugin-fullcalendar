@@ -7,15 +7,26 @@
     {{ date(dt)|date_modify(_self.timeOffset(tm))|date('Ymd\\THis\\Z', 'UTC') }}
 {%- endmacro %}
 {% set values = form.value %}
+{% set event = email.event|defined({}) %}
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//metamotive/fckalendar//NONSGML v1.0//EN
 BEGIN:VEVENT
 METHOD:REQUEST
+STATUS:TENTATIVE
 UID:{{ unique_id(32) }}
 DTSTAMP:{{ _self.isoDateTime() }}
 DTSTART:{{ _self.isoDateTime(values.dtstart, values.start) }}
 DTEND:{{ _self.isoDateTime(values.dtfinish, values.finish) }}
-SUMMARY:{{ values.name }}
+SUMMARY:{{ (event.summary|defined(values.name))|ical_text|raw }}
+{% if event.description -%}
+DESCRIPTION:{{ event.description|ical_text|raw }}
+{% endif %}
+{% if event.location -%}
+LOCATION:{{ event.location|ical_text|raw }}
+{% endif %}
+{% if event.notes -%}
+NOTES:{{ event.notes|ical_text|raw }}
+{% endif %}
 END:VEVENT
 END:VCALENDAR

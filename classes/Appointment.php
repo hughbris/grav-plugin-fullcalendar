@@ -45,6 +45,7 @@ class Appointment extends Email {
                 $params[$key] = $value;
             }
         }
+
         if (!$params['to']) {
             throw new \RuntimeException($language->translate('PLUGIN_EMAIL.PLEASE_CONFIGURE_A_TO_ADDRESS'));
         }
@@ -56,6 +57,15 @@ class Appointment extends Email {
         $vars += [
             'email' => $params,
         ];
+
+        // $this->grav['log']->info(serialize($params['event']));
+
+        // process event values before processing 'ical' property, so its Twig values are resolved first
+        if(array_key_exists('event', $vars['email'])) {
+            foreach ($vars['email']['event'] as $key => &$value) {
+                $value = $twig->processString($value, $vars);
+            }
+        }
 
         $params = $this->processParams($params, $vars);
 
@@ -82,7 +92,7 @@ class Appointment extends Email {
             }
         }
 
-        $ics = $twig->processString($params['ical'], $vars);
+        $ics = $params['ical'];
 
         // from https://github.com/symfony/symfony/issues/47279#issuecomment-1232053603
         $attachment = new DataPart($ics, 'request.ics', 'text/calendar', 'quoted-printable');
@@ -90,7 +100,6 @@ class Appointment extends Email {
         $attachment->getHeaders()->addParameterizedHeader('Content-Type', 'text/calendar', ['charset' => 'utf-8', 'method' => 'REQUEST']);
         $email->attachPart($attachment);
 
-        $this->grav['log']->info(serialize($params));
         return $message;
     }
 }
