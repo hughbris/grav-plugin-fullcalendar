@@ -38,6 +38,8 @@ class Appointment extends Email {
             'reply_to_name' => $config->get('plugins.email.reply_to_name'),
             'to' => $config->get('plugins.email.to'),
             'to_name' => $config->get('plugins.email.to_name'),
+            'process_markdown' => false,
+            'template' => false,
         ];
 
         foreach ($defaults as $key => $value) {
@@ -68,11 +70,32 @@ class Appointment extends Email {
         }
 
         $params = $this->processParams($params, $vars);
+        // $this->grav['log']->info(serialize($params['event']));
 
         $email = $message->getEmail();
         // Process parameters.
         foreach ($params as $key => $value) {
             switch ($key) {
+
+                case 'body':
+                    if (is_string($value)) {
+                        $this->processBody($message, $params, $vars, $twig, $value);
+                    } elseif (is_array($value)) {
+                        foreach ($value as $body_part) {
+                            $params_part = $params;
+                            if (isset($body_part['content_type'])) {
+                                $params_part['content_type'] = $body_part['content_type'];
+                            }
+                            if (isset($body_part['template'])) {
+                                $params_part['template'] = $body_part['template'];
+                            }
+                            if (isset($body_part['body'])) {
+                                $this->processBody($message, $params_part, $vars, $twig, $body_part['body']);
+                            }
+                        }
+                    }
+                    break;
+
                 case 'subject':
                     if ($value) {
                         $message->subject($language->translate($value));
