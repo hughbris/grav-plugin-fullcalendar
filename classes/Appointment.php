@@ -61,9 +61,11 @@ class Appointment extends Email {
         // $this->grav['log']->info(serialize($params['event']));
 
         // process event values before processing 'ical' property, so its Twig values are resolved first
-        if(array_key_exists('event', $vars['email'])) {
-            foreach ($vars['email']['event'] as $key => &$value) {
-                $value = $twig->processString($value, $vars);
+        if(array_key_exists('events', $vars['email'])) {
+            foreach ($vars['email']['events'] as &$event) {
+                foreach ($event as &$value) {
+                    $value = $twig->processString($value, $vars);
+                }
             }
         }
 

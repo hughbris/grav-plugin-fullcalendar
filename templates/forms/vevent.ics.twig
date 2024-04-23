@@ -4,7 +4,7 @@
 {%- endmacro %}
 {% macro isoDateTime(dt, tm = '00:00') -%}
     {% set dt = dt|default(date()) %}
-    {{ date(dt)|date_modify(_self.timeOffset(tm))|date('Ymd\\THis\\Z', 'UTC') }}
+    {{- date(dt)|date_modify(_self.timeOffset(tm))|date('Ymd\\THis\\Z', 'UTC') -}}
 {%- endmacro %}
 {% set event_text_fields = ['description', 'location'] %}
 BEGIN:VEVENT
@@ -17,5 +17,5 @@ DTEND:{{ _self.isoDateTime(values.dtfinish, values.finish) }}
 SUMMARY:{{ (event.summary|defined(values.name))|ical_text|raw }}
 {% for text_field in event_text_fields if event[text_field] -%}
 {{ text_field|upper }}:{{ event[text_field]|ical_text|raw }}
-{% endfor %}
+{% endfor -%}
 END:VEVENT

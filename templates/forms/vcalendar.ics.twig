@@ -1,7 +1,9 @@
 {% set values = form.value %}
-{% set event = email.event|defined({}) %}
+{% set events = email.events|defined([]) %}
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//metamotive/fckalendar//NONSGML v1.0//EN
+{% for event in events -%}
 {{ include('forms/vevent.ics.twig') }}
+{%- endfor %}
 END:VCALENDAR
