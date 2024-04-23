@@ -25,8 +25,5 @@ DESCRIPTION:{{ event.description|ical_text|raw }}
 {% if event.location -%}
 LOCATION:{{ event.location|ical_text|raw }}
 {% endif %}
-{% if event.notes -%}
-NOTES:{{ event.notes|ical_text|raw }}
-{% endif %}
 END:VEVENT
 END:VCALENDAR
